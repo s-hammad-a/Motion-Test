@@ -1,0 +1,287 @@
+<html>
+<head>
+<title>screen3.dart</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #a9b7c6;}
+.s1 { color: #6a8759;}
+.s2 { color: #cc7832;}
+.s3 { color: #6897bb;}
+.s4 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+screen3.dart</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">'dart:convert'</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">'package:flutter/cupertino.dart'</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">'package:flutter/material.dart'</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">'package:flutter_blue/flutter_blue.dart'</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">'package:ble_controller/services/DatabaseQueries.dart'</span><span class="s2">;</span>
+
+<span class="s2">class </span><span class="s0">Screen3 </span><span class="s2">extends </span><span class="s0">StatefulWidget {</span>
+  <span class="s2">const </span><span class="s0">Screen3({Key? key}) : </span><span class="s2">super</span><span class="s0">(key: key)</span><span class="s2">;</span>
+
+  <span class="s0">@override</span>
+  <span class="s0">_Screen3State createState() =&gt; _Screen3State()</span><span class="s2">;</span>
+<span class="s0">}</span>
+
+<span class="s2">class </span><span class="s0">_Screen3State </span><span class="s2">extends </span><span class="s0">State&lt;Screen3&gt; {</span>
+  <span class="s0">String str = </span><span class="s1">'1'</span><span class="s2">;</span>
+  <span class="s0">TextEditingController ssidController = </span><span class="s2">new </span><span class="s0">TextEditingController()</span><span class="s2">;</span>
+  <span class="s0">TextEditingController passController = </span><span class="s2">new </span><span class="s0">TextEditingController()</span><span class="s2">;</span>
+  <span class="s0">bool field = </span><span class="s2">true;</span>
+  <span class="s0">Color color = Colors.grey</span><span class="s2">;</span>
+  <span class="s0">late BluetoothCharacteristic sendData</span><span class="s2">;</span>
+  <span class="s0">late BluetoothCharacteristic recieveIP</span><span class="s2">;</span>
+  <span class="s0">late BluetoothCharacteristic recieveStatus</span><span class="s2">;</span>
+  <span class="s0">bool check = </span><span class="s2">false;</span>
+  <span class="s0">late String deviceName</span><span class="s2">;</span>
+  <span class="s0">String ipAddress = </span><span class="s1">' '</span><span class="s2">;</span>
+  <span class="s0">@override</span>
+  <span class="s0">Widget build(BuildContext context) {</span>
+    <span class="s0">String payload = </span><span class="s1">' '</span><span class="s2">;</span>
+    <span class="s0">String status = </span><span class="s1">' '</span><span class="s2">;</span>
+    <span class="s0">dynamic args = ModalRoute.of(context)!.settings.arguments</span><span class="s2">;</span>
+    <span class="s0">BluetoothDevice device = args![</span><span class="s1">'device'</span><span class="s0">]</span><span class="s2">;</span>
+    <span class="s0">deviceName = device.name</span><span class="s2">;</span>
+    <span class="s0">Future&lt;</span><span class="s2">void</span><span class="s0">&gt; readCharacteristics() async {</span>
+      <span class="s0">List&lt;BluetoothService&gt; services = await device.discoverServices()</span><span class="s2">;</span>
+      <span class="s0">services.forEach((element) async {</span>
+        <span class="s2">if</span><span class="s0">(element.uuid.toString() == </span><span class="s1">&quot;4401188a-1ad8-11ec-9621-0242ac130002&quot;</span><span class="s0">) {</span>
+          <span class="s2">var </span><span class="s0">characteristics = element.characteristics</span><span class="s2">;</span>
+          <span class="s2">for </span><span class="s0">(BluetoothCharacteristic c </span><span class="s2">in </span><span class="s0">characteristics ) {</span>
+            <span class="s2">if</span><span class="s0">(c.uuid.toString() == </span><span class="s1">&quot;44011a92-1ad8-11ec-9621-0242ac130002&quot;</span><span class="s0">) {</span>
+              <span class="s0">sendData = c</span><span class="s2">;</span>
+              <span class="s0">await sendData.write(utf8.encode(</span><span class="s1">&quot;{'A':'K','K':'331308381b7f11ec96210242ac130002'}&quot;</span><span class="s0">))</span><span class="s2">;</span>
+            <span class="s0">}</span>
+            <span class="s2">else if </span><span class="s0">(c.uuid.toString() == </span><span class="s1">&quot;44011eca-1ad8-11ec-9621-0242ac130002&quot;</span><span class="s0">) {</span>
+              <span class="s0">recieveIP = c</span><span class="s2">;</span>
+              <span class="s0">await recieveIP.setNotifyValue(</span><span class="s2">true</span><span class="s0">)</span><span class="s2">;</span>
+              <span class="s0">recieveIP.value.listen((value) {</span>
+                <span class="s0">ipAddress = </span><span class="s1">'http://</span><span class="s0">${utf8.decode(value)}</span><span class="s1">/'</span><span class="s2">;</span>
+                <span class="s0">print(</span><span class="s1">'chawal </span><span class="s0">$ipAddress</span><span class="s1">'</span><span class="s0">)</span><span class="s2">;</span>
+                <span class="s2">if </span><span class="s0">(ipAddress.length &gt; </span><span class="s3">8</span><span class="s0">)</span>
+                  <span class="s0">check = </span><span class="s2">true;</span>
+              <span class="s0">})</span><span class="s2">;</span>
+              <span class="s4">//ipAddress = utf8.decode(await recieveIP.read());</span>
+            <span class="s0">}</span>
+            <span class="s2">else if </span><span class="s0">(c.uuid.toString() == </span><span class="s1">&quot;44011fc4-1ad8-11ec-9621-0242ac130002&quot;</span><span class="s0">) {</span>
+              <span class="s0">recieveStatus = c</span><span class="s2">;</span>
+              <span class="s0">status = utf8.decode(await recieveStatus.read())</span><span class="s2">;</span>
+            <span class="s0">}</span>
+          <span class="s0">}</span>
+        <span class="s0">}</span>
+      <span class="s0">})</span><span class="s2">;</span>
+    <span class="s0">}</span>
+    <span class="s2">if</span><span class="s0">(str==</span><span class="s1">'1'</span><span class="s0">)</span>
+      <span class="s0">readCharacteristics()</span><span class="s2">;</span>
+    <span class="s2">return </span><span class="s0">Scaffold(</span>
+      <span class="s0">backgroundColor: Colors.grey[</span><span class="s3">350</span><span class="s0">]</span><span class="s2">,</span>
+      <span class="s0">appBar: AppBar(</span>
+        <span class="s0">title: Text(</span>
+          <span class="s1">'Motion App'</span><span class="s2">,</span>
+          <span class="s0">style: TextStyle(</span>
+            <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">centerTitle: </span><span class="s2">true,</span>
+      <span class="s0">)</span><span class="s2">,</span>
+      <span class="s0">body: Column (</span>
+        <span class="s0">crossAxisAlignment: CrossAxisAlignment.stretch</span><span class="s2">,</span>
+        <span class="s4">//mainAxisAlignment: MainAxisAlignment.start,</span>
+        <span class="s0">children: [</span>
+          <span class="s0">Expanded(</span>
+            <span class="s0">flex: </span><span class="s3">3</span><span class="s2">,</span>
+            <span class="s0">child: Container(</span>
+              <span class="s0">padding: EdgeInsets.fromLTRB(</span><span class="s3">0</span><span class="s2">, </span><span class="s3">15</span><span class="s2">, </span><span class="s3">0</span><span class="s2">, </span><span class="s3">0</span><span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">alignment: Alignment.topCenter</span><span class="s2">,</span>
+              <span class="s0">child: Text(</span>
+                <span class="s0">device.name</span><span class="s2">,</span>
+                <span class="s0">style: TextStyle(</span>
+                  <span class="s0">fontSize: </span><span class="s3">30</span><span class="s2">,</span>
+                  <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+            <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">SizedBox()</span><span class="s2">,</span>
+          <span class="s0">Expanded(</span>
+            <span class="s0">flex: </span><span class="s3">1</span><span class="s2">,</span>
+            <span class="s0">child: Container(</span>
+              <span class="s0">alignment: Alignment(-</span><span class="s3">0.9</span><span class="s2">,</span><span class="s0">-</span><span class="s3">1</span><span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">child: Text(</span>
+                <span class="s1">'WiFi Settings'</span><span class="s2">,</span>
+                <span class="s0">style: TextStyle(</span>
+                  <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                  <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+            <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">SizedBox()</span><span class="s2">,</span>
+          <span class="s0">Expanded(</span>
+            <span class="s0">flex: </span><span class="s3">2</span><span class="s2">,</span>
+            <span class="s0">child: Padding(</span>
+              <span class="s0">padding: </span><span class="s2">const </span><span class="s0">EdgeInsets.fromLTRB(</span><span class="s3">8</span><span class="s2">, </span><span class="s3">0</span><span class="s2">, </span><span class="s3">8</span><span class="s2">, </span><span class="s3">0</span><span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">child: SizedBox(</span>
+                <span class="s0">height: </span><span class="s3">10</span><span class="s2">,</span>
+                <span class="s0">width: </span><span class="s3">300</span><span class="s2">,</span>
+                <span class="s0">child: TextFormField(</span>
+                  <span class="s0">enabled: field</span><span class="s2">,</span>
+                  <span class="s0">controller: ssidController</span><span class="s2">,</span>
+                  <span class="s0">decoration: </span><span class="s2">const </span><span class="s0">InputDecoration(</span>
+                      <span class="s0">border: UnderlineInputBorder()</span><span class="s2">,</span>
+                      <span class="s0">labelText: </span><span class="s1">'SSID'</span><span class="s2">,</span>
+                      <span class="s0">labelStyle: TextStyle(</span>
+                        <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                      <span class="s0">)</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+            <span class="s0">)</span>
+          <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">SizedBox()</span><span class="s2">,</span>
+          <span class="s0">Expanded(</span>
+            <span class="s0">flex: </span><span class="s3">2</span><span class="s2">,</span>
+            <span class="s0">child: Padding(</span>
+              <span class="s0">padding: </span><span class="s2">const </span><span class="s0">EdgeInsets.fromLTRB(</span><span class="s3">8</span><span class="s2">, </span><span class="s3">0</span><span class="s2">, </span><span class="s3">8</span><span class="s2">, </span><span class="s3">0</span><span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">child: SizedBox(</span>
+                <span class="s0">height: </span><span class="s3">10</span><span class="s2">,</span>
+                <span class="s0">width: </span><span class="s3">300</span><span class="s2">,</span>
+                <span class="s0">child: TextFormField(</span>
+                  <span class="s0">enabled: field</span><span class="s2">,</span>
+                  <span class="s0">controller: passController</span><span class="s2">,</span>
+                  <span class="s0">decoration: </span><span class="s2">const </span><span class="s0">InputDecoration(</span>
+                      <span class="s0">border: UnderlineInputBorder()</span><span class="s2">,</span>
+                      <span class="s0">labelText: </span><span class="s1">'Password'</span><span class="s2">,</span>
+                      <span class="s0">labelStyle: TextStyle(</span>
+                        <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                      <span class="s0">)</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+            <span class="s0">)</span>
+          <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">Expanded(</span>
+            <span class="s0">flex: </span><span class="s3">2</span><span class="s2">,</span>
+            <span class="s0">child: Container(</span>
+              <span class="s0">padding: EdgeInsets.fromLTRB(</span><span class="s3">0</span><span class="s2">, </span><span class="s3">5</span><span class="s2">, </span><span class="s3">0</span><span class="s2">, </span><span class="s3">0</span><span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">height: </span><span class="s3">30</span><span class="s2">,</span>
+              <span class="s0">width: </span><span class="s3">60</span><span class="s2">,</span>
+              <span class="s0">alignment: Alignment(</span><span class="s3">0</span><span class="s2">,</span><span class="s0">-</span><span class="s3">1</span><span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">child: FittedBox(</span>
+                <span class="s0">child: FloatingActionButton(</span>
+                  <span class="s0">elevation: </span><span class="s3">10</span><span class="s2">,</span>
+                  <span class="s0">child: Icon(</span>
+                    <span class="s0">Icons.send</span><span class="s2">,</span>
+                    <span class="s0">semanticLabel : </span><span class="s1">'Send'</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">onPressed: () async {</span>
+                    <span class="s0">showAlert(context</span><span class="s2">, </span><span class="s1">'Waiting for </span><span class="s0">${device.name} </span><span class="s1">to connect to WiFi....'</span><span class="s0">)</span><span class="s2">;</span>
+                    <span class="s0">field = </span><span class="s2">false;</span>
+                    <span class="s0">str=</span><span class="s1">'2'</span><span class="s2">;</span>
+                    <span class="s0">setState(() {</span>
+
+                    <span class="s0">})</span><span class="s2">;</span>
+                    <span class="s0">payload = </span><span class="s1">&quot;{'A':'W','S':'</span><span class="s0">${ssidController.text}</span><span class="s1">','P':'</span><span class="s0">${passController.text}</span><span class="s1">'}&quot;</span><span class="s2">;</span>
+                    <span class="s0">await sendData.write(utf8.encode(payload))</span><span class="s2">;</span>
+                    <span class="s0">await Future.delayed(Duration(seconds: </span><span class="s3">10</span><span class="s0">))</span><span class="s2">;</span>
+                    <span class="s2">if</span><span class="s0">(check) {</span>
+                      <span class="s0">showAlert(context</span><span class="s2">, </span><span class="s1">'Device Connected to WiFi'</span><span class="s0">)</span><span class="s2">;</span>
+                      <span class="s0">field = </span><span class="s2">false;</span>
+                      <span class="s0">color = Colors.blue</span><span class="s2">;</span>
+                    <span class="s0">}</span>
+                    <span class="s2">else </span><span class="s0">{</span>
+                      <span class="s0">showAlert(context</span><span class="s2">, </span><span class="s1">'Device Failed to Connect to WiFi'</span><span class="s0">)</span><span class="s2">;</span>
+                      <span class="s0">field = </span><span class="s2">true;</span>
+                      <span class="s0">color = Colors.grey</span><span class="s2">;</span>
+                    <span class="s0">}</span>
+                    <span class="s0">str=</span><span class="s1">'2'</span><span class="s2">;</span>
+                    <span class="s0">setState(() {</span>
+
+                    <span class="s0">})</span><span class="s2">;</span>
+                  <span class="s0">}</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+            <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">Expanded(</span>
+              <span class="s0">flex: </span><span class="s3">3</span><span class="s2">,</span>
+              <span class="s0">child: Row(</span>
+                <span class="s0">children: [</span>
+                  <span class="s0">Expanded(</span>
+                    <span class="s0">flex: </span><span class="s3">1</span><span class="s2">,</span>
+                    <span class="s0">child: SizedBox()</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">Expanded(</span>
+                    <span class="s0">flex: </span><span class="s3">2</span><span class="s2">,</span>
+                    <span class="s0">child: FlatButton(</span>
+                      <span class="s0">color: Colors.blue</span><span class="s2">,</span>
+                      <span class="s0">onPressed: () {</span>
+                        <span class="s0">Navigator.pop(context)</span><span class="s2">;</span>
+                      <span class="s0">}</span><span class="s2">,</span>
+                      <span class="s0">child: Text(</span>
+                        <span class="s1">'Cancel'</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">Expanded(</span>
+                    <span class="s0">flex: </span><span class="s3">1</span><span class="s2">,</span>
+                    <span class="s0">child: SizedBox()</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">Expanded(</span>
+                    <span class="s0">flex: </span><span class="s3">2</span><span class="s2">,</span>
+                    <span class="s0">child: FlatButton(</span>
+                      <span class="s0">color: color</span><span class="s2">,</span>
+                      <span class="s0">onPressed: () async {</span>
+                        <span class="s2">if</span><span class="s0">(check) {</span>
+                          <span class="s0">await DatabaseConnection.instance.deleted()</span><span class="s2">;</span>
+                          <span class="s0">await DatabaseConnection.instance.create(deviceName</span><span class="s2">,</span>
+                              <span class="s0">[</span><span class="s1">'Open'</span><span class="s2">, </span><span class="s1">'Close'</span><span class="s2">, </span><span class="s1">'Manual'</span><span class="s2">, </span><span class="s1">'*needed*'</span><span class="s2">, </span><span class="s1">'PET Mode'</span><span class="s0">]</span><span class="s2">, </span><span class="s0">ipAddress)</span><span class="s2">;</span>
+                          <span class="s0">Navigator.popUntil(</span>
+                              <span class="s0">context</span><span class="s2">, </span><span class="s0">ModalRoute.withName(</span><span class="s1">'/screen1'</span><span class="s0">))</span><span class="s2">;</span>
+                          <span class="s4">//device.disconnect();</span>
+                        <span class="s0">}</span>
+                      <span class="s0">}</span><span class="s2">,</span>
+                      <span class="s0">child: Text(</span>
+                          <span class="s1">'Okay'</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">Expanded(</span>
+                    <span class="s0">flex: </span><span class="s3">1</span><span class="s2">,</span>
+                    <span class="s0">child: SizedBox()</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">]</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">)</span>
+        <span class="s0">]</span><span class="s2">,</span>
+      <span class="s0">)</span>
+    <span class="s0">)</span><span class="s2">;</span>
+  <span class="s0">}</span>
+<span class="s0">}</span>
+
+<span class="s0">Future&lt;</span><span class="s2">void</span><span class="s0">&gt; showAlert(BuildContext context</span><span class="s2">, </span><span class="s0">String message) async {</span>
+  <span class="s0">showDialog(</span>
+      <span class="s0">context: context</span><span class="s2">,</span>
+      <span class="s0">builder: (context) =&gt; StatefulBuilder(</span>
+          <span class="s0">builder: (context</span><span class="s2">, </span><span class="s0">setState) {</span>
+            <span class="s2">return </span><span class="s0">AlertDialog(</span>
+              <span class="s0">title: Text(</span>
+                <span class="s0">message</span><span class="s2">,</span>
+                <span class="s0">style: TextStyle(</span>
+                  <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                  <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">)</span>
+            <span class="s0">)</span><span class="s2">;</span>
+          <span class="s0">}</span>
+      <span class="s0">)</span>
+  <span class="s0">)</span><span class="s2">;</span>
+<span class="s0">}</span></pre>
+</body>
+</html>

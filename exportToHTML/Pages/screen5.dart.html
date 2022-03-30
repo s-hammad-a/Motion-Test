@@ -1,0 +1,131 @@
+<html>
+<head>
+<title>screen5.dart</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #a9b7c6;}
+.s1 { color: #6a8759;}
+.s2 { color: #cc7832;}
+.s3 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+screen5.dart</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">'package:flutter/material.dart'</span><span class="s2">;</span>
+
+<span class="s2">class </span><span class="s0">Screen5 </span><span class="s2">extends </span><span class="s0">StatefulWidget {</span>
+  <span class="s2">const </span><span class="s0">Screen5({Key? key}) : </span><span class="s2">super</span><span class="s0">(key: key)</span><span class="s2">;</span>
+
+  <span class="s0">@override</span>
+  <span class="s0">_Screen5State createState() =&gt; _Screen5State()</span><span class="s2">;</span>
+<span class="s0">}</span>
+
+<span class="s2">class </span><span class="s0">_Screen5State </span><span class="s2">extends </span><span class="s0">State&lt;Screen5&gt; {</span>
+  <span class="s0">dynamic args</span><span class="s2">;</span>
+  <span class="s0">String str = </span><span class="s1">'e'</span><span class="s2">;</span>
+  <span class="s0">bool bol = </span><span class="s2">true;</span>
+  <span class="s0">IconData icon = Icons.height</span><span class="s2">;</span>
+  <span class="s0">@override</span>
+  <span class="s0">Widget build(BuildContext context) {</span>
+    <span class="s0">args = ModalRoute.of(context)!.settings.arguments</span><span class="s2">;</span>
+    <span class="s0">String name</span><span class="s2">;</span>
+    <span class="s0">bool state = args[</span><span class="s1">'state'</span><span class="s0">]</span><span class="s2">;</span>
+    <span class="s2">if</span><span class="s0">(str == </span><span class="s1">'e'</span><span class="s0">) {</span>
+      <span class="s0">name = args[</span><span class="s1">'name'</span><span class="s0">]</span><span class="s2">;</span>
+    <span class="s0">}</span>
+    <span class="s2">else </span><span class="s0">{</span>
+      <span class="s0">name = str</span><span class="s2">;</span>
+    <span class="s0">}</span>
+    <span class="s2">if</span><span class="s0">(!state &amp;&amp; icon == Icons.height) {</span>
+      <span class="s0">icon = Icons.power_off_rounded</span><span class="s2">;</span>
+    <span class="s0">}</span>
+    <span class="s2">else if </span><span class="s0">(state &amp;&amp; icon == Icons.height){</span>
+      <span class="s0">icon = Icons.power</span><span class="s2">;</span>
+    <span class="s0">}</span>
+    <span class="s0">TextEditingController textControl = </span><span class="s2">new </span><span class="s0">TextEditingController(text: name)</span><span class="s2">;</span>
+    <span class="s2">return </span><span class="s0">Scaffold(</span>
+      <span class="s0">backgroundColor: Colors.grey[</span><span class="s3">350</span><span class="s0">]</span><span class="s2">,</span>
+      <span class="s0">appBar: AppBar(</span>
+        <span class="s0">title: Text(</span>
+          <span class="s1">'Motion App'</span><span class="s2">,</span>
+          <span class="s0">style: TextStyle(</span>
+            <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">centerTitle: </span><span class="s2">true,</span>
+        <span class="s0">leading: </span><span class="s2">new </span><span class="s0">IconButton(</span>
+          <span class="s0">icon: </span><span class="s2">new </span><span class="s0">Icon(Icons.arrow_back)</span><span class="s2">,</span>
+          <span class="s0">onPressed: () {</span>
+            <span class="s0">name = textControl.text</span><span class="s2">;</span>
+            <span class="s0">Navigator.pop(context</span><span class="s2">, </span><span class="s0">{</span>
+              <span class="s1">'name' </span><span class="s0">: name</span><span class="s2">,</span>
+              <span class="s1">'state' </span><span class="s0">: bol</span><span class="s2">,</span>
+            <span class="s0">})</span><span class="s2">;</span>
+          <span class="s0">}</span><span class="s2">,</span>
+        <span class="s0">)</span><span class="s2">,</span>
+      <span class="s0">)</span><span class="s2">,</span>
+      <span class="s0">body: Center(</span>
+        <span class="s0">child: Column(</span>
+          <span class="s0">crossAxisAlignment: CrossAxisAlignment.center</span><span class="s2">,</span>
+          <span class="s0">mainAxisAlignment: MainAxisAlignment.center</span><span class="s2">,</span>
+          <span class="s0">children: [</span>
+            <span class="s0">Expanded(</span>
+              <span class="s0">flex: </span><span class="s3">3</span><span class="s2">,</span>
+              <span class="s0">child: Center(</span>
+                <span class="s0">child: TextFormField(</span>
+                  <span class="s0">textAlign: TextAlign.center</span><span class="s2">,</span>
+                  <span class="s0">style: TextStyle(</span>
+                    <span class="s0">color: Colors.black</span><span class="s2">,</span>
+                    <span class="s0">fontSize: </span><span class="s3">30</span><span class="s2">,</span>
+                    <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">controller: textControl</span><span class="s2">,</span>
+                  <span class="s0">cursorColor: Colors.black</span><span class="s2">,</span>
+                  <span class="s0">focusNode: FocusNode()</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+            <span class="s0">)</span><span class="s2">,</span>
+            <span class="s0">SizedBox()</span><span class="s2">,</span>
+            <span class="s0">Expanded(</span>
+              <span class="s0">flex: </span><span class="s3">30</span><span class="s2">,</span>
+              <span class="s0">child: SizedBox(</span>
+                <span class="s0">height: </span><span class="s3">250</span><span class="s2">,</span>
+                <span class="s0">width: </span><span class="s3">250</span><span class="s2">,</span>
+                <span class="s0">child: FloatingActionButton(</span>
+                  <span class="s0">elevation: </span><span class="s3">20</span><span class="s2">,</span>
+                  <span class="s0">onPressed: () {</span>
+                    <span class="s2">if</span><span class="s0">(icon == Icons.power_off_rounded) {</span>
+                      <span class="s0">icon = Icons.power</span><span class="s2">;</span>
+                      <span class="s0">bol = </span><span class="s2">true;</span>
+                    <span class="s0">}</span>
+                    <span class="s2">else </span><span class="s0">{</span>
+                      <span class="s0">icon = Icons.power_off_rounded</span><span class="s2">;</span>
+                      <span class="s0">bol = </span><span class="s2">false;</span>
+                    <span class="s0">}</span>
+                    <span class="s0">str = textControl.text</span><span class="s2">;</span>
+                    <span class="s0">setState(() {</span>
+
+                    <span class="s0">})</span><span class="s2">;</span>
+                  <span class="s0">}</span><span class="s2">,</span>
+                  <span class="s0">child: Icon(</span>
+                    <span class="s0">icon</span><span class="s2">,</span>
+                    <span class="s0">size: </span><span class="s3">150</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">backgroundColor: Colors.indigo[</span><span class="s3">800</span><span class="s0">]</span><span class="s2">,</span>
+                  <span class="s0">foregroundColor: Colors.white</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+            <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">]</span>
+        <span class="s0">)</span><span class="s2">,</span>
+      <span class="s0">)</span>
+    <span class="s0">)</span><span class="s2">;</span>
+  <span class="s0">}</span>
+<span class="s0">}</span>
+</pre>
+</body>
+</html>

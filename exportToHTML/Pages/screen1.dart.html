@@ -1,0 +1,141 @@
+<html>
+<head>
+<title>screen1.dart</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #a9b7c6;}
+.s1 { color: #6a8759;}
+.s2 { color: #cc7832;}
+.s3 { color: #6897bb;}
+.s4 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+screen1.dart</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">'package:flutter/material.dart'</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">'package:ble_controller/services/DatabaseQueries.dart'</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">'package:http/http.dart'</span><span class="s2">;</span>
+
+<span class="s2">class </span><span class="s0">Screen1 </span><span class="s2">extends </span><span class="s0">StatefulWidget {</span>
+  <span class="s2">const </span><span class="s0">Screen1({Key? key}) : </span><span class="s2">super</span><span class="s0">(key: key)</span><span class="s2">;</span>
+
+  <span class="s0">@override</span>
+  <span class="s0">_Screen1State createState() =&gt; _Screen1State()</span><span class="s2">;</span>
+<span class="s0">}</span>
+
+<span class="s2">class </span><span class="s0">_Screen1State </span><span class="s2">extends </span><span class="s0">State&lt;Screen1&gt; {</span>
+  <span class="s0">dynamic devices</span><span class="s2">;</span>
+  <span class="s0">int count = </span><span class="s3">0</span><span class="s2">;</span>
+  <span class="s0">String str = </span><span class="s1">'1'</span><span class="s2">;</span>
+
+  <span class="s2">void </span><span class="s0">data(BuildContext context) async {</span>
+    <span class="s0">dynamic obj = await DatabaseConnection.instance.readDevice()</span><span class="s2">;</span>
+    <span class="s0">int ids = obj[</span><span class="s1">'deviceId'</span><span class="s0">]</span><span class="s2">;</span>
+    <span class="s0">dynamic details = await DatabaseConnection.instance.readDevices(ids)</span><span class="s2">;</span>
+    <span class="s0">str = </span><span class="s1">'2'</span><span class="s2">;</span>
+    <span class="s0">setState(() {</span>
+      <span class="s0">count = </span><span class="s3">1</span><span class="s2">;</span>
+      <span class="s0">str = </span><span class="s1">'2'</span><span class="s2">;</span>
+      <span class="s0">devices = details</span><span class="s2">;</span>
+    <span class="s0">})</span><span class="s2">;</span>
+  <span class="s0">}</span>
+  <span class="s0">@override</span>
+  <span class="s0">Widget build(BuildContext context) {</span>
+    <span class="s0">dynamic args = ModalRoute.of(context)!.settings.arguments</span><span class="s2">;</span>
+    <span class="s2">if</span><span class="s0">(str == </span><span class="s1">'1'</span><span class="s0">){</span>
+      <span class="s0">devices = args[</span><span class="s1">'devices'</span><span class="s0">]</span><span class="s2">;</span>
+      <span class="s0">count = args[</span><span class="s1">'count'</span><span class="s0">]</span><span class="s2">;</span>
+    <span class="s0">}</span>
+    <span class="s2">else </span><span class="s0">{</span>
+      <span class="s0">data(context)</span><span class="s2">;</span>
+    <span class="s0">}</span>
+    <span class="s2">return </span><span class="s0">Scaffold(</span>
+      <span class="s0">backgroundColor: Colors.grey[</span><span class="s3">350</span><span class="s0">]</span><span class="s2">,</span>
+      <span class="s0">appBar: AppBar(</span>
+        <span class="s0">title: Text(</span>
+          <span class="s1">'Motion App'</span><span class="s2">,</span>
+          <span class="s0">style: TextStyle(</span>
+            <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">centerTitle: </span><span class="s2">true,</span>
+      <span class="s0">)</span><span class="s2">,</span>
+      <span class="s0">body: Padding(</span>
+        <span class="s0">padding: EdgeInsets.fromLTRB(</span><span class="s3">0</span><span class="s2">, </span><span class="s3">20</span><span class="s2">, </span><span class="s3">0</span><span class="s2">, </span><span class="s3">0</span><span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">child: Column(</span>
+          <span class="s4">//mainAxisAlignment: MainAxisAlignment.center,</span>
+          <span class="s0">crossAxisAlignment: CrossAxisAlignment.center</span><span class="s2">,</span>
+          <span class="s0">children: [</span>
+            <span class="s0">Expanded(</span>
+              <span class="s0">flex: </span><span class="s3">3</span><span class="s2">,</span>
+              <span class="s0">child: Center(</span>
+                <span class="s0">child: FloatingActionButton.extended(</span>
+                  <span class="s0">onPressed: () async {</span>
+                    <span class="s0">await Navigator.pushNamed(context</span><span class="s2">, </span><span class="s1">'/screen2'</span><span class="s0">)</span><span class="s2">;</span>
+                    <span class="s0">data(context)</span><span class="s2">;</span>
+                  <span class="s0">}</span><span class="s2">,</span>
+                  <span class="s0">label: Text(</span>
+                    <span class="s1">'Add New Device'</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">icon: Icon(Icons.add)</span><span class="s2">,</span>
+                  <span class="s0">backgroundColor: Colors.grey[</span><span class="s3">800</span><span class="s0">]</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+            <span class="s0">)</span><span class="s2">,</span>
+            <span class="s0">Expanded(</span>
+              <span class="s0">child: ListView.builder(</span>
+                <span class="s0">itemCount: count</span><span class="s2">,</span>
+                <span class="s0">itemBuilder: (context</span><span class="s2">, </span><span class="s0">index) {</span>
+                  <span class="s2">return </span><span class="s0">Card(</span>
+                    <span class="s0">color: Colors.blue</span><span class="s2">,</span>
+                    <span class="s0">child: ListTile(</span>
+                      <span class="s0">onTap: () async {</span>
+                        <span class="s0">String ip = </span><span class="s1">'</span><span class="s0">${devices[index][</span><span class="s1">'ipAddress'</span><span class="s0">]}</span><span class="s1">'</span><span class="s2">;</span>
+                        <span class="s2">try </span><span class="s0">{</span>
+                          <span class="s0">Response response = await get(</span>
+                              <span class="s0">Uri.parse(</span><span class="s1">'</span><span class="s0">${ip}</span><span class="s1">status'</span><span class="s0">))</span><span class="s2">;</span>
+                          <span class="s0">print(response.body)</span><span class="s2">;</span>
+                          <span class="s0">await Navigator.pushNamed(context</span><span class="s2">, </span><span class="s1">'/screen4'</span><span class="s2">, </span><span class="s0">arguments: {</span>
+                            <span class="s1">'deviceId'</span><span class="s0">: devices[index][</span><span class="s1">'deviceId'</span><span class="s0">]</span><span class="s2">,</span>
+                            <span class="s1">'deviceName'</span><span class="s0">: devices[index][</span><span class="s1">'deviceName'</span><span class="s0">]</span><span class="s2">,</span>
+                            <span class="s1">'button1'</span><span class="s0">: devices[index][</span><span class="s1">'button1'</span><span class="s0">]</span><span class="s2">,</span>
+                            <span class="s1">'button2'</span><span class="s0">: devices[index][</span><span class="s1">'button2'</span><span class="s0">]</span><span class="s2">,</span>
+                            <span class="s1">'button3'</span><span class="s0">: devices[index][</span><span class="s1">'button3'</span><span class="s0">]</span><span class="s2">,</span>
+                            <span class="s1">'button4'</span><span class="s0">: devices[index][</span><span class="s1">'button4'</span><span class="s0">]</span><span class="s2">,</span>
+                            <span class="s1">'button5'</span><span class="s0">: devices[index][</span><span class="s1">'button5'</span><span class="s0">]</span><span class="s2">,</span>
+                            <span class="s1">'ipAddress'</span><span class="s0">: devices[index][</span><span class="s1">'ipAddress'</span><span class="s0">]</span><span class="s2">,</span>
+                            <span class="s1">'status' </span><span class="s0">: response.body</span><span class="s2">,</span>
+                          <span class="s0">})</span><span class="s2">;</span>
+                        <span class="s0">}</span>
+                        <span class="s2">catch </span><span class="s0">(ex) {</span>
+                          <span class="s0">print(ex)</span><span class="s2">;</span>
+                        <span class="s0">}</span>
+                      <span class="s0">}</span><span class="s2">,</span>
+                      <span class="s0">title: Center(</span>
+                        <span class="s0">child: Text(</span>
+                            <span class="s0">devices[index][</span><span class="s1">'deviceName'</span><span class="s0">]</span><span class="s2">,</span>
+                            <span class="s0">style: TextStyle(</span>
+                              <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                              <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                            <span class="s0">)</span><span class="s2">,</span>
+                        <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">;</span>
+                <span class="s0">}</span>
+              <span class="s0">)</span>
+            <span class="s0">)</span><span class="s2">,</span>
+            <span class="s0">Expanded(flex: </span><span class="s3">4</span><span class="s2">, </span><span class="s0">child: SizedBox())</span><span class="s2">,</span>
+          <span class="s0">]</span><span class="s2">,</span>
+        <span class="s0">)</span><span class="s2">,</span>
+      <span class="s0">)</span><span class="s2">,</span>
+    <span class="s0">)</span><span class="s2">;</span>
+  <span class="s0">}</span>
+<span class="s0">}</span>
+</pre>
+</body>
+</html>

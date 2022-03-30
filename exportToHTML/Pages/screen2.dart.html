@@ -1,0 +1,222 @@
+<html>
+<head>
+<title>screen2.dart</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #a9b7c6;}
+.s1 { color: #6a8759;}
+.s2 { color: #cc7832;}
+.s3 { color: #6897bb;}
+.s4 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+screen2.dart</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">'package:flutter/material.dart'</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">'package:flutter_blue/flutter_blue.dart'</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">'dart:async'</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">'dart:math'</span><span class="s2">;</span>
+
+<span class="s2">class </span><span class="s0">Screen2 </span><span class="s2">extends </span><span class="s0">StatefulWidget {</span>
+  <span class="s2">const </span><span class="s0">Screen2({Key? key}) : </span><span class="s2">super</span><span class="s0">(key: key)</span><span class="s2">;</span>
+
+  <span class="s0">@override</span>
+  <span class="s0">_Screen2State createState() =&gt; _Screen2State()</span><span class="s2">;</span>
+<span class="s0">}</span>
+
+<span class="s2">class </span><span class="s0">_Screen2State </span><span class="s2">extends </span><span class="s0">State&lt;Screen2&gt; {</span>
+  <span class="s0">bool check2 = </span><span class="s2">false;</span>
+  <span class="s0">FlutterBlue flutterBlue = FlutterBlue.instance</span><span class="s2">;</span>
+  <span class="s0">String feedback = </span><span class="s1">&quot;Tap to connect&quot;</span><span class="s2">;</span>
+  <span class="s0">int x = -</span><span class="s3">1</span><span class="s2">;</span>
+  <span class="s0">Future&lt;</span><span class="s2">void</span><span class="s0">&gt; chawal () async {</span>
+    <span class="s0">flutterBlue.scanResults.listen((results) {</span>
+      <span class="s2">for </span><span class="s0">(ScanResult dev </span><span class="s2">in </span><span class="s0">results) {</span>
+        <span class="s0">print(dev.device.name)</span><span class="s2">;</span>
+      <span class="s0">}</span>
+    <span class="s0">})</span><span class="s2">;</span>
+  <span class="s0">}</span>
+
+  <span class="s0">Future&lt;</span><span class="s2">void</span><span class="s0">&gt; getDevices() async {</span>
+    <span class="s4">//Stream results;</span>
+    <span class="s4">// Start scanning</span>
+    <span class="s0">flutterBlue.stopScan()</span><span class="s2">;</span>
+    <span class="s0">print(</span><span class="s1">'heloo'</span><span class="s0">)</span><span class="s2">;</span>
+    <span class="s0">await flutterBlue.startScan(timeout: Duration(seconds: </span><span class="s3">4</span><span class="s0">))</span><span class="s2">;</span>
+    <span class="s0">print(</span><span class="s1">'heloo1'</span><span class="s0">)</span><span class="s2">;</span>
+    <span class="s0">flutterBlue.stopScan()</span><span class="s2">;</span>
+    <span class="s0">print(</span><span class="s1">'heloo2'</span><span class="s0">)</span><span class="s2">;</span>
+    <span class="s0">await chawal()</span><span class="s2">;</span>
+    <span class="s4">//Future&lt;List&gt; devices = results.toList();</span>
+  <span class="s0">}</span>
+
+  <span class="s0">@override</span>
+  <span class="s0">Widget build(BuildContext context) {</span>
+    <span class="s2">return </span><span class="s0">Scaffold(</span>
+      <span class="s0">backgroundColor: Colors.grey[</span><span class="s3">350</span><span class="s0">]</span><span class="s2">,</span>
+      <span class="s0">bottomNavigationBar: BottomAppBar (</span>
+        <span class="s0">color: Colors.blue[</span><span class="s3">700</span><span class="s0">]</span><span class="s2">,</span>
+        <span class="s0">child: Container(</span>
+          <span class="s0">height: </span><span class="s3">60.0</span><span class="s2">,</span>
+        <span class="s0">)</span><span class="s2">,</span>
+      <span class="s0">)</span><span class="s2">,</span>
+      <span class="s0">appBar: AppBar(</span>
+        <span class="s0">title: Text(</span>
+          <span class="s1">'Motion App'</span><span class="s2">,</span>
+          <span class="s0">style: TextStyle(</span>
+            <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">centerTitle: </span><span class="s2">true,</span>
+        <span class="s0">elevation: </span><span class="s3">0.0</span><span class="s2">,</span>
+      <span class="s0">)</span><span class="s2">,</span>
+      <span class="s0">floatingActionButton: Container(</span>
+        <span class="s0">height: </span><span class="s3">80</span><span class="s2">,</span>
+        <span class="s0">width: </span><span class="s3">80</span><span class="s2">,</span>
+        <span class="s0">decoration: BoxDecoration(</span>
+          <span class="s0">border: Border.all(color: Colors.white</span><span class="s2">, </span><span class="s0">width: </span><span class="s3">5</span><span class="s0">)</span><span class="s2">,</span>
+          <span class="s4">//color: Colors.indigo[900],</span>
+          <span class="s0">shape: BoxShape.circle</span><span class="s2">,</span>
+        <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">child: FittedBox(</span>
+          <span class="s0">child: FloatingActionButton(</span>
+            <span class="s0">elevation: </span><span class="s3">20</span><span class="s2">,</span>
+            <span class="s0">onPressed: () async {</span>
+              <span class="s2">if </span><span class="s0">(!(await flutterBlue.isAvailable)) {</span>
+                <span class="s0">showAlert(context</span><span class="s2">, </span><span class="s1">'Bluetooth Not found'</span><span class="s0">)</span><span class="s2">;</span>
+                <span class="s0">setState(() {})</span><span class="s2">;</span>
+              <span class="s0">}</span>
+              <span class="s2">else if</span><span class="s0">(!(await flutterBlue.isOn)) {</span>
+                  <span class="s0">showAlert(context</span><span class="s2">, </span><span class="s1">'Turn on Bluetooth'</span><span class="s0">)</span><span class="s2">;</span>
+                  <span class="s0">setState(() {})</span><span class="s2">;</span>
+              <span class="s0">}</span>
+              <span class="s2">else </span><span class="s0">{</span>
+                <span class="s0">getDevices()</span><span class="s2">;</span>
+                <span class="s0">setState(() {})</span><span class="s2">;</span>
+              <span class="s0">}</span>
+            <span class="s0">}</span><span class="s2">,</span>
+            <span class="s0">child: Icon(</span>
+              <span class="s0">Icons.bluetooth</span><span class="s2">,</span>
+              <span class="s0">size: </span><span class="s3">40</span><span class="s2">,</span>
+            <span class="s0">)</span><span class="s2">,</span>
+            <span class="s0">backgroundColor: Colors.indigo[</span><span class="s3">800</span><span class="s0">]</span><span class="s2">,</span>
+            <span class="s0">foregroundColor: Colors.white</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">)</span><span class="s2">,</span>
+      <span class="s0">)</span><span class="s2">,</span>
+      <span class="s0">floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked</span><span class="s2">,</span>
+      <span class="s0">body: StreamBuilder&lt;List&lt;ScanResult&gt;&gt; (</span>
+        <span class="s0">stream: flutterBlue.scanResults</span><span class="s2">,</span>
+        <span class="s0">builder: (c</span><span class="s2">, </span><span class="s0">snapshot) {</span>
+          <span class="s2">return </span><span class="s0">Column(</span>
+            <span class="s0">children: snapshot.data!.map((e) {</span>
+              <span class="s0">List&lt;String&gt; list = e.advertisementData.serviceUuids</span><span class="s2">;</span>
+              <span class="s0">bool check = </span><span class="s2">false;</span>
+              <span class="s2">for </span><span class="s0">(int i = </span><span class="s3">0</span><span class="s2">; </span><span class="s0">i &lt; list.length</span><span class="s2">; </span><span class="s0">i++) {</span>
+                <span class="s2">if </span><span class="s0">(list[i] == </span><span class="s1">&quot;4401188a-1ad8-11ec-9621-0242ac130002&quot;</span><span class="s0">) {</span>
+                  <span class="s0">x = i</span><span class="s2">;</span>
+                  <span class="s0">check = </span><span class="s2">true;</span>
+                  <span class="s0">check2 = </span><span class="s2">true;</span>
+                  <span class="s2">break;</span>
+                <span class="s0">}</span>
+              <span class="s0">}</span>
+              <span class="s2">if </span><span class="s0">(check) {</span>
+                <span class="s2">return </span><span class="s0">Row(</span>
+                  <span class="s0">children: [</span>
+                    <span class="s0">Expanded(</span>
+                      <span class="s0">child: Card(</span>
+                        <span class="s0">child: ListTile(</span>
+                          <span class="s0">subtitle: Text(</span>
+                            <span class="s0">feedback</span><span class="s2">,</span>
+                            <span class="s0">style: TextStyle(</span>
+                              <span class="s0">fontSize: </span><span class="s3">10</span><span class="s2">,</span>
+                              <span class="s0">color: Colors.black</span><span class="s2">,</span>
+                            <span class="s0">)</span><span class="s2">,</span>
+                          <span class="s0">)</span><span class="s2">,</span>
+                          <span class="s0">isThreeLine: </span><span class="s2">false,</span>
+                          <span class="s0">minVerticalPadding: </span><span class="s3">25</span><span class="s2">,</span>
+                          <span class="s0">onTap: () async {</span>
+                            <span class="s0">setState(() {</span>
+                              <span class="s0">feedback = </span><span class="s1">&quot;Connecting....&quot;</span><span class="s2">;</span>
+                            <span class="s0">})</span><span class="s2">;</span>
+                            <span class="s0">await e.device.connect(autoConnect: </span><span class="s2">false</span><span class="s0">)</span><span class="s2">;</span>
+                            <span class="s0">List&lt;BluetoothDevice&gt; obj = await flutterBlue</span>
+                                <span class="s0">.connectedDevices</span><span class="s2">;</span>
+                            <span class="s2">if </span><span class="s0">(obj[</span><span class="s3">0</span><span class="s0">] == e.device) {</span>
+                              <span class="s0">feedback = </span><span class="s1">&quot;Connected&quot;</span><span class="s2">;</span>
+                              <span class="s0">setState(() { })</span><span class="s2">;</span>
+                              <span class="s0">await Navigator.pushNamed(</span>
+                                <span class="s0">context</span><span class="s2">, </span><span class="s1">'/screen3'</span><span class="s2">, </span><span class="s0">arguments: {</span>
+                                  <span class="s1">'device'</span><span class="s0">: obj[</span><span class="s3">0</span><span class="s0">]</span><span class="s2">,</span>
+                                <span class="s0">}</span>
+                              <span class="s0">)</span><span class="s2">;</span>
+                              <span class="s0">await e.device.disconnect()</span><span class="s2">;</span>
+                              <span class="s0">feedback = </span><span class="s1">&quot;Tap to connect&quot;</span><span class="s2">;</span>
+                              <span class="s0">setState(() {  })</span><span class="s2">;</span>
+                            <span class="s0">}</span>
+                            <span class="s2">else </span><span class="s0">{</span>
+                              <span class="s0">print(</span><span class="s1">&quot;not working&quot;</span><span class="s0">)</span><span class="s2">;</span>
+                            <span class="s0">}</span>
+                          <span class="s0">}</span><span class="s2">,</span>
+                          <span class="s0">title: Text(</span>
+                            <span class="s0">e.device.name</span><span class="s2">,</span>
+                            <span class="s0">style: TextStyle(</span>
+                              <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                              <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                            <span class="s0">)</span><span class="s2">,</span>
+                          <span class="s0">)</span><span class="s2">,</span>
+                        <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">]</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">;</span>
+              <span class="s0">}</span>
+              <span class="s2">else if </span><span class="s0">(!check2) {</span>
+                <span class="s2">return </span><span class="s0">Padding(</span>
+                  <span class="s0">padding: </span><span class="s2">const </span><span class="s0">EdgeInsets.fromLTRB(</span><span class="s3">0</span><span class="s2">, </span><span class="s3">300</span><span class="s2">, </span><span class="s3">0</span><span class="s2">, </span><span class="s3">0</span><span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">child: Center(</span>
+                    <span class="s0">child: Text(</span>
+                      <span class="s1">'No Device Found !!!'</span><span class="s2">,</span>
+                      <span class="s0">style: TextStyle(</span>
+                        <span class="s0">fontSize: </span><span class="s3">30</span><span class="s2">,</span>
+                        <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">;</span>
+              <span class="s0">}</span>
+              <span class="s2">else </span><span class="s0">{</span>
+                <span class="s2">return </span><span class="s0">SizedBox.shrink()</span><span class="s2">;</span>
+              <span class="s0">}</span>
+            <span class="s0">}</span>
+            <span class="s0">).toList()</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">;</span>
+        <span class="s0">}</span>
+      <span class="s0">)</span>
+    <span class="s0">)</span><span class="s2">;</span>
+  <span class="s0">}</span>
+  <span class="s2">void </span><span class="s0">showAlert(BuildContext context</span><span class="s2">, </span><span class="s0">String message) {</span>
+    <span class="s0">showDialog(</span>
+      <span class="s0">context: context</span><span class="s2">,</span>
+      <span class="s0">builder: (context) =&gt; AlertDialog(</span>
+        <span class="s0">title: Center(</span>
+          <span class="s0">child: Text(</span>
+            <span class="s0">message</span><span class="s2">,</span>
+            <span class="s0">style: TextStyle(</span>
+              <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+              <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+            <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">)</span><span class="s2">,</span>
+      <span class="s0">)</span>
+    <span class="s0">)</span><span class="s2">;</span>
+  <span class="s0">}</span>
+<span class="s0">}</span>
+
+</pre>
+</body>
+</html>

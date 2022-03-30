@@ -1,0 +1,604 @@
+<html>
+<head>
+<title>screen4.dart</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #a9b7c6;}
+.s1 { color: #6a8759;}
+.s2 { color: #cc7832;}
+.s3 { color: #6897bb;}
+.s4 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+screen4.dart</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">'package:flutter/cupertino.dart'</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">'package:flutter/material.dart'</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">'package:http/http.dart'</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">'package:ble_controller/services/DatabaseQueries.dart'</span><span class="s2">;</span>
+
+<span class="s2">class </span><span class="s0">Screen4 </span><span class="s2">extends </span><span class="s0">StatefulWidget {</span>
+  <span class="s2">const </span><span class="s0">Screen4({Key? key}) : </span><span class="s2">super</span><span class="s0">(key: key)</span><span class="s2">;</span>
+
+  <span class="s0">@override</span>
+  <span class="s0">_Screen4State createState() =&gt; _Screen4State()</span><span class="s2">;</span>
+<span class="s0">}</span>
+
+<span class="s0">int time1 = </span><span class="s3">0</span><span class="s2">;</span>
+<span class="s0">int time2 = </span><span class="s3">0</span><span class="s2">;</span>
+<span class="s0">String name5 = </span><span class="s1">&quot;B5&quot;</span><span class="s2">;</span>
+
+<span class="s2">class </span><span class="s0">_Screen4State </span><span class="s2">extends </span><span class="s0">State&lt;Screen4&gt; {</span>
+  <span class="s0">dynamic details = {</span>
+    <span class="s1">'deviceId'</span><span class="s0">: </span><span class="s3">2</span><span class="s2">,</span>
+    <span class="s1">'deviceName'</span><span class="s0">: </span><span class="s1">&quot;details['deviceName']&quot;</span><span class="s2">,</span>
+    <span class="s1">'button1'</span><span class="s0">: </span><span class="s1">&quot;R1&quot;</span><span class="s2">,</span>
+    <span class="s1">'button2'</span><span class="s0">: </span><span class="s1">&quot;R2&quot;</span><span class="s2">,</span>
+    <span class="s1">'button3'</span><span class="s0">: </span><span class="s1">&quot;R3&quot;</span><span class="s2">,</span>
+    <span class="s1">'button4'</span><span class="s0">: </span><span class="s1">&quot;R4&quot;</span><span class="s2">,</span>
+    <span class="s1">'button5'</span><span class="s0">: </span><span class="s1">&quot;R5&quot;</span><span class="s2">,</span>
+    <span class="s1">'ipAddress'</span><span class="s0">: </span><span class="s1">&quot;details['ipAddress']&quot;</span><span class="s2">,</span>
+    <span class="s1">'status' </span><span class="s0">: </span><span class="s1">&quot;0000&quot;</span><span class="s2">,</span>
+  <span class="s0">}</span><span class="s2">;</span>
+  <span class="s0">late String name1</span><span class="s2">;</span>
+  <span class="s0">late String name2</span><span class="s2">;</span>
+  <span class="s0">late String name3</span><span class="s2">;</span>
+  <span class="s0">late String name4</span><span class="s2">;</span>
+  <span class="s0">late String name5</span><span class="s2">;</span>
+  <span class="s0">late String deviceName</span><span class="s2">;</span>
+  <span class="s0">late String ip</span><span class="s2">;</span>
+  <span class="s0">late String status</span><span class="s2">;</span>
+  <span class="s0">bool button1 = </span><span class="s2">false;</span>
+  <span class="s0">bool button2 = </span><span class="s2">false;</span>
+  <span class="s0">bool button3 = </span><span class="s2">false;</span>
+  <span class="s0">bool button4 = </span><span class="s2">false;</span>
+  <span class="s0">String str = </span><span class="s1">'1'</span><span class="s2">;</span>
+  <span class="s0">late int id</span><span class="s2">;</span>
+  <span class="s2">var </span><span class="s0">colors = </span><span class="s2">new </span><span class="s0">List&lt;Color&gt;.filled(</span><span class="s3">4</span><span class="s2">, </span><span class="s0">Colors.red)</span><span class="s2">;</span>
+  <span class="s2">var </span><span class="s0">button = </span><span class="s2">new </span><span class="s0">List&lt;bool&gt;.filled(</span><span class="s3">4</span><span class="s2">, false, </span><span class="s0">growable: </span><span class="s2">false</span><span class="s0">)</span><span class="s2">;</span>
+  <span class="s0">late TextEditingController textControl1</span><span class="s2">;</span>
+  <span class="s0">late TextEditingController textControl2</span><span class="s2">;</span>
+  <span class="s0">late TextEditingController textControl3</span><span class="s2">;</span>
+  <span class="s0">late TextEditingController textControl4</span><span class="s2">;</span>
+  <span class="s0">late TextEditingController textControl5</span><span class="s2">;</span>
+
+  <span class="s0">@override</span>
+  <span class="s0">Widget build(BuildContext context) {</span>
+    <span class="s2">if </span><span class="s0">(str == </span><span class="s1">'1'</span><span class="s0">) {</span>
+      <span class="s4">//details = ModalRoute.of(context)!.settings.arguments;</span>
+      <span class="s0">name1 = details[</span><span class="s1">'button1'</span><span class="s0">]</span><span class="s2">;</span>
+      <span class="s0">name2 = details[</span><span class="s1">'button2'</span><span class="s0">]</span><span class="s2">;</span>
+      <span class="s0">name3 = details[</span><span class="s1">'button3'</span><span class="s0">]</span><span class="s2">;</span>
+      <span class="s0">name4 = details[</span><span class="s1">'button4'</span><span class="s0">]</span><span class="s2">;</span>
+      <span class="s0">name5 = details[</span><span class="s1">'button5'</span><span class="s0">]</span><span class="s2">;</span>
+      <span class="s0">textControl1 = </span><span class="s2">new </span><span class="s0">TextEditingController(text: name1)</span><span class="s2">;</span>
+      <span class="s0">textControl2 = </span><span class="s2">new </span><span class="s0">TextEditingController(text: name2)</span><span class="s2">;</span>
+      <span class="s0">textControl3 = </span><span class="s2">new </span><span class="s0">TextEditingController(text: name3)</span><span class="s2">;</span>
+      <span class="s0">textControl4 = </span><span class="s2">new </span><span class="s0">TextEditingController(text: name4)</span><span class="s2">;</span>
+      <span class="s0">textControl5 = </span><span class="s2">new </span><span class="s0">TextEditingController(text: name5)</span><span class="s2">;</span>
+      <span class="s0">deviceName = details[</span><span class="s1">'deviceName'</span><span class="s0">]</span><span class="s2">;</span>
+      <span class="s0">ip = details[</span><span class="s1">'ipAddress'</span><span class="s0">]</span><span class="s2">;</span>
+      <span class="s0">status = details[</span><span class="s1">'status'</span><span class="s0">]</span><span class="s2">;</span>
+      <span class="s0">id = details[</span><span class="s1">'deviceId'</span><span class="s0">]</span><span class="s2">;</span>
+      <span class="s2">for </span><span class="s0">(int i = </span><span class="s3">0</span><span class="s2">; </span><span class="s0">i &lt; </span><span class="s3">4</span><span class="s2">; </span><span class="s0">i++) {</span>
+        <span class="s2">if </span><span class="s0">(status[i] == </span><span class="s1">'0'</span><span class="s0">) {</span>
+          <span class="s0">button[i] = </span><span class="s2">false;</span>
+          <span class="s0">colors[i] = Colors.red</span><span class="s2">;</span>
+        <span class="s0">} </span><span class="s2">else </span><span class="s0">{</span>
+          <span class="s0">button[i] = </span><span class="s2">true;</span>
+          <span class="s0">colors[i] = Colors.green</span><span class="s2">;</span>
+        <span class="s0">}</span>
+      <span class="s0">}</span>
+      <span class="s0">str = </span><span class="s1">'2'</span><span class="s2">;</span>
+      <span class="s0">print(</span><span class="s1">'kutti ka bacha chal raha hai'</span><span class="s0">)</span><span class="s2">;</span>
+      <span class="s4">//status get karna hai ip se</span>
+    <span class="s0">}</span>
+    <span class="s0">Size size = MediaQuery.of(context).size</span><span class="s2">;</span>
+    <span class="s0">double height = size.height</span><span class="s2">;</span>
+    <span class="s0">double width = size.width</span><span class="s2">;</span>
+    <span class="s2">return </span><span class="s0">Scaffold(</span>
+      <span class="s0">backgroundColor: Colors.grey[</span><span class="s3">350</span><span class="s0">]</span><span class="s2">,</span>
+      <span class="s0">appBar: AppBar(</span>
+        <span class="s0">title: Text(</span>
+          <span class="s1">'Motion App'</span><span class="s2">,</span>
+          <span class="s0">style: TextStyle(</span>
+            <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">centerTitle: </span><span class="s2">true,</span>
+      <span class="s0">)</span><span class="s2">,</span>
+      <span class="s0">body: Column (</span>
+        <span class="s0">crossAxisAlignment: CrossAxisAlignment.center</span><span class="s2">,</span>
+        <span class="s0">mainAxisAlignment: MainAxisAlignment.start</span><span class="s2">,</span>
+        <span class="s0">children: [</span>
+          <span class="s0">Expanded(</span>
+            <span class="s0">flex: </span><span class="s3">1</span><span class="s2">,</span>
+            <span class="s0">child: Text(</span>
+              <span class="s0">deviceName ?? </span><span class="s1">&quot;No device found&quot;</span><span class="s2">,</span>
+              <span class="s0">style: TextStyle(</span>
+                <span class="s0">fontSize: </span><span class="s3">30</span><span class="s2">,</span>
+                <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+            <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">SizedBox()</span><span class="s2">,</span>
+          <span class="s0">Expanded(</span>
+            <span class="s0">flex: </span><span class="s3">4</span><span class="s2">,</span>
+            <span class="s0">child: Row(</span>
+              <span class="s0">children: [</span>
+                <span class="s0">Expanded(</span>
+                  <span class="s0">flex: </span><span class="s3">10</span><span class="s2">,</span>
+                  <span class="s0">child: SizedBox()</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">Expanded(</span>
+                  <span class="s0">flex: </span><span class="s3">35</span><span class="s2">,</span>
+                  <span class="s0">child: Card(</span>
+                    <span class="s0">shape: RoundedRectangleBorder(</span>
+                      <span class="s0">borderRadius: BorderRadius.circular(</span><span class="s3">15.0</span><span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">color: colors[</span><span class="s3">0</span><span class="s0">]</span><span class="s2">,</span>
+                    <span class="s0">child: ListTile(</span>
+                      <span class="s0">leading: Container(</span>
+                        <span class="s0">width: </span><span class="s3">50</span><span class="s2">,</span>
+                        <span class="s0">height: </span><span class="s3">50</span><span class="s2">,</span>
+                        <span class="s0">decoration: BoxDecoration(</span>
+                          <span class="s0">image: DecorationImage(</span>
+                            <span class="s0">image: AssetImage(</span><span class="s1">'assets/B1.png'</span><span class="s0">)</span><span class="s2">,</span>
+                            <span class="s0">fit: BoxFit.cover</span><span class="s2">,</span>
+                          <span class="s0">)</span><span class="s2">,</span>
+                        <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">autofocus: !button1</span><span class="s2">,</span>
+                      <span class="s0">onLongPress: () {</span>
+                        <span class="s0">button1 = </span><span class="s2">true;</span>
+                        <span class="s0">setState(() {</span>
+
+                        <span class="s0">})</span><span class="s2">;</span>
+                      <span class="s0">}</span><span class="s2">,</span>
+                      <span class="s0">title: TextFormField(</span>
+                        <span class="s0">onEditingComplete: () {</span>
+                          <span class="s0">button1 = </span><span class="s2">false;</span>
+                          <span class="s0">name1 = textControl1.text</span><span class="s2">;</span>
+                          <span class="s0">DatabaseConnection.instance.update(id</span><span class="s2">, </span><span class="s0">deviceName</span><span class="s2">, </span><span class="s0">[name1</span><span class="s2">, </span><span class="s0">name2</span><span class="s2">, </span><span class="s0">name3</span><span class="s2">, </span><span class="s0">name4</span><span class="s2">, </span><span class="s0">name5]</span><span class="s2">, </span><span class="s0">ip)</span><span class="s2">;</span>
+                          <span class="s0">setState(() { })</span><span class="s2">;</span>
+                        <span class="s0">}</span><span class="s2">,</span>
+                        <span class="s0">enabled: button1</span><span class="s2">,</span>
+                        <span class="s0">autofocus: !button1</span><span class="s2">,</span>
+                        <span class="s0">controller: textControl1</span><span class="s2">,</span>
+                        <span class="s0">style: TextStyle(</span>
+                          <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                          <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                        <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">onTap: () async {</span>
+                        <span class="s2">if </span><span class="s0">(colors[</span><span class="s3">0</span><span class="s0">] == Colors.green) {</span>
+                          <span class="s0">Response response = await post(</span>
+                              <span class="s0">Uri.parse(</span><span class="s1">'</span><span class="s0">${ip}</span><span class="s1">B1'</span><span class="s0">)</span><span class="s2">, </span><span class="s0">body: </span><span class="s1">&quot;0&quot;</span><span class="s0">)</span><span class="s2">;</span>
+                          <span class="s2">if </span><span class="s0">(response.body == </span><span class="s1">&quot;Ok&quot;</span><span class="s0">) {</span>
+                            <span class="s0">colors[</span><span class="s3">0</span><span class="s0">] = Colors.red</span><span class="s2">;</span>
+                            <span class="s0">button[</span><span class="s3">0</span><span class="s0">] = </span><span class="s2">false;</span>
+                          <span class="s0">}</span>
+                        <span class="s0">}</span>
+                        <span class="s2">else if</span><span class="s0">(colors[</span><span class="s3">1</span><span class="s0">] == Colors.red &amp;&amp; colors[</span><span class="s3">2</span><span class="s0">] == Colors.red &amp;&amp; colors[</span><span class="s3">3</span><span class="s0">] == Colors.red) {</span>
+                          <span class="s0">Response response = await post(Uri.parse(</span><span class="s1">'</span><span class="s0">${ip}</span><span class="s1">B1'</span><span class="s0">)</span><span class="s2">, </span><span class="s0">body: </span><span class="s1">&quot;1&quot;</span><span class="s0">)</span><span class="s2">;</span>
+                          <span class="s2">if </span><span class="s0">(response.body == </span><span class="s1">&quot;Ok&quot;</span><span class="s0">) {</span>
+                            <span class="s0">colors[</span><span class="s3">0</span><span class="s0">] = Colors.green</span><span class="s2">;</span>
+                            <span class="s0">button[</span><span class="s3">0</span><span class="s0">] = </span><span class="s2">true;</span>
+                          <span class="s0">}</span>
+                        <span class="s0">}</span>
+                        <span class="s0">setState(() { })</span><span class="s2">;</span>
+                      <span class="s0">}</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">Expanded(</span>
+                  <span class="s0">flex: </span><span class="s3">10</span><span class="s2">,</span>
+                  <span class="s0">child: SizedBox()</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">Expanded(</span>
+                  <span class="s0">flex: </span><span class="s3">35</span><span class="s2">,</span>
+                  <span class="s0">child: Card(</span>
+                    <span class="s0">shape: RoundedRectangleBorder(</span>
+                      <span class="s0">borderRadius: BorderRadius.circular(</span><span class="s3">15.0</span><span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">color: colors[</span><span class="s3">1</span><span class="s0">]</span><span class="s2">,</span>
+                    <span class="s0">child: ListTile(</span>
+                      <span class="s0">leading: Container(</span>
+                        <span class="s0">width: </span><span class="s3">50</span><span class="s2">,</span>
+                        <span class="s0">height: </span><span class="s3">50</span><span class="s2">,</span>
+                        <span class="s0">decoration: BoxDecoration(</span>
+                          <span class="s0">image: DecorationImage(</span>
+                            <span class="s0">image: AssetImage(</span><span class="s1">'assets/B2.png'</span><span class="s0">)</span><span class="s2">,</span>
+                            <span class="s0">fit: BoxFit.cover</span><span class="s2">,</span>
+                          <span class="s0">)</span><span class="s2">,</span>
+                        <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">autofocus: !button2</span><span class="s2">,</span>
+                      <span class="s0">onLongPress: () {</span>
+                        <span class="s0">button2 = </span><span class="s2">true;</span>
+                        <span class="s0">setState(() {</span>
+
+                        <span class="s0">})</span><span class="s2">;</span>
+                      <span class="s0">}</span><span class="s2">,</span>
+                      <span class="s0">title: TextFormField(</span>
+                        <span class="s0">onEditingComplete: () {</span>
+                          <span class="s0">button2 = </span><span class="s2">false;</span>
+                          <span class="s0">name2 = textControl2.text</span><span class="s2">;</span>
+                          <span class="s0">DatabaseConnection.instance.update(id</span><span class="s2">, </span><span class="s0">deviceName</span><span class="s2">, </span><span class="s0">[name1</span><span class="s2">, </span><span class="s0">name2</span><span class="s2">, </span><span class="s0">name3</span><span class="s2">, </span><span class="s0">name4</span><span class="s2">, </span><span class="s0">name5]</span><span class="s2">, </span><span class="s0">ip)</span><span class="s2">;</span>
+                          <span class="s0">setState(() {})</span><span class="s2">;</span>
+                        <span class="s0">}</span><span class="s2">,</span>
+                        <span class="s0">enabled: button2</span><span class="s2">,</span>
+                        <span class="s0">autofocus: !button2</span><span class="s2">,</span>
+                        <span class="s0">controller: textControl2</span><span class="s2">,</span>
+                        <span class="s0">style: TextStyle(</span>
+                          <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                          <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                        <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">onTap: () async {</span>
+                        <span class="s2">if</span><span class="s0">(colors[</span><span class="s3">1</span><span class="s0">] == Colors.green) {</span>
+                          <span class="s0">Response response = await post(Uri.parse(</span><span class="s1">'</span><span class="s0">${ip}</span><span class="s1">B2'</span><span class="s0">)</span><span class="s2">, </span><span class="s0">body: </span><span class="s1">&quot;0&quot;</span><span class="s0">)</span><span class="s2">;</span>
+                          <span class="s2">if </span><span class="s0">(response.body == </span><span class="s1">&quot;Ok&quot;</span><span class="s0">) {</span>
+                            <span class="s0">colors[</span><span class="s3">1</span><span class="s0">] = Colors.red</span><span class="s2">;</span>
+                            <span class="s0">button[</span><span class="s3">1</span><span class="s0">] = </span><span class="s2">false;</span>
+                          <span class="s0">}</span>
+                        <span class="s0">}</span>
+                        <span class="s2">else if</span><span class="s0">(colors[</span><span class="s3">0</span><span class="s0">] == Colors.red &amp;&amp; colors[</span><span class="s3">2</span><span class="s0">] == Colors.red &amp;&amp; colors[</span><span class="s3">3</span><span class="s0">] == Colors.red) {</span>
+                          <span class="s0">Response response = await post(Uri.parse(</span><span class="s1">'</span><span class="s0">${ip}</span><span class="s1">B2'</span><span class="s0">)</span><span class="s2">, </span><span class="s0">body: </span><span class="s1">&quot;1&quot;</span><span class="s0">)</span><span class="s2">;</span>
+                          <span class="s2">if </span><span class="s0">(response.body == </span><span class="s1">&quot;Ok&quot;</span><span class="s0">) {</span>
+                            <span class="s0">colors[</span><span class="s3">1</span><span class="s0">] = Colors.green</span><span class="s2">;</span>
+                            <span class="s0">button[</span><span class="s3">1</span><span class="s0">] = </span><span class="s2">true;</span>
+                          <span class="s0">}</span>
+                        <span class="s0">}</span>
+                        <span class="s0">setState(() {</span>
+
+                        <span class="s0">})</span><span class="s2">;</span>
+                      <span class="s0">}</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">Expanded(</span>
+                  <span class="s0">flex: </span><span class="s3">10</span><span class="s2">,</span>
+                  <span class="s0">child: SizedBox()</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">]</span><span class="s2">,</span>
+            <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">SizedBox()</span><span class="s2">,</span>
+          <span class="s0">Expanded(</span>
+            <span class="s0">flex: </span><span class="s3">2</span><span class="s2">,</span>
+            <span class="s0">child: Row(</span>
+              <span class="s0">children: [</span>
+                <span class="s0">Expanded(</span>
+                  <span class="s0">flex: </span><span class="s3">20</span><span class="s2">,</span>
+                  <span class="s0">child: SizedBox()</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">Expanded(</span>
+                  <span class="s0">flex: </span><span class="s3">35</span><span class="s2">,</span>
+                  <span class="s0">child: Center(</span>
+                    <span class="s0">child: Card(</span>
+                      <span class="s0">shape: RoundedRectangleBorder(</span>
+                        <span class="s0">borderRadius: BorderRadius.circular(</span><span class="s3">15.0</span><span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">color: Colors.blue[</span><span class="s3">900</span><span class="s0">]</span><span class="s2">,</span>
+                      <span class="s0">child: ListTile(</span>
+                          <span class="s0">leading: Container(</span>
+                            <span class="s0">width: </span><span class="s3">70</span><span class="s2">,</span>
+                            <span class="s0">height: </span><span class="s3">70</span><span class="s2">,</span>
+                            <span class="s0">decoration: BoxDecoration(</span>
+                              <span class="s0">image: DecorationImage(</span>
+                                <span class="s0">image: AssetImage(</span><span class="s1">'assets/B3.png'</span><span class="s0">)</span><span class="s2">,</span>
+                                <span class="s0">fit: BoxFit.cover</span><span class="s2">,</span>
+                              <span class="s0">)</span><span class="s2">,</span>
+                            <span class="s0">)</span><span class="s2">,</span>
+                          <span class="s0">)</span><span class="s2">,</span>
+                        <span class="s0">title: Center(</span>
+                          <span class="s0">child: Text(</span>
+                            <span class="s0">name5</span><span class="s2">,</span>
+                            <span class="s0">style: TextStyle(</span>
+                              <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                              <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                            <span class="s0">)</span><span class="s2">,</span>
+                          <span class="s0">)</span><span class="s2">,</span>
+                        <span class="s0">)</span><span class="s2">,</span>
+                        <span class="s0">onTap: () async {</span>
+                          <span class="s0">String payload = </span><span class="s1">&quot;{'t1':'</span><span class="s0">$time1</span><span class="s1">':'t2':'</span><span class="s0">$time2</span><span class="s1">'}&quot;</span><span class="s2">;</span>
+                          <span class="s0">Response response = await post(Uri.parse(</span><span class="s1">'</span><span class="s0">${ip}</span><span class="s1">B5'</span><span class="s0">)</span><span class="s2">, </span><span class="s0">body: payload)</span><span class="s2">;</span>
+                          <span class="s0">await Future.delayed(Duration(seconds: (time1 + time2 + </span><span class="s3">3</span><span class="s0">)))</span><span class="s2">;</span>
+                          <span class="s0">colors[</span><span class="s3">0</span><span class="s0">] = Colors.red</span><span class="s2">;</span>
+                          <span class="s0">colors[</span><span class="s3">1</span><span class="s0">] = Colors.red</span><span class="s2">;</span>
+                          <span class="s0">colors[</span><span class="s3">2</span><span class="s0">] = Colors.red</span><span class="s2">;</span>
+                          <span class="s0">colors[</span><span class="s3">3</span><span class="s0">] = Colors.red</span><span class="s2">;</span>
+                          <span class="s0">setState(() {})</span><span class="s2">;</span>
+                        <span class="s0">}</span><span class="s2">,</span>
+                        <span class="s0">onLongPress: () async {</span>
+                          <span class="s0">await showAlert(context</span><span class="s2">, </span><span class="s0">ip)</span><span class="s2">;</span>
+                          <span class="s0">await Future.delayed(Duration(seconds: </span><span class="s3">10</span><span class="s0">))</span><span class="s2">;</span>
+                          <span class="s4">//time1 = obj['t1'];</span>
+                          <span class="s4">//time2 = obj['t2'];</span>
+                          <span class="s0">setState(() {})</span><span class="s2">;</span>
+                        <span class="s0">}</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">Expanded(</span>
+                  <span class="s0">flex: </span><span class="s3">20</span><span class="s2">,</span>
+                  <span class="s0">child: SizedBox()</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">]</span><span class="s2">,</span>
+            <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">Expanded(</span>
+            <span class="s0">flex: </span><span class="s3">4</span><span class="s2">,</span>
+            <span class="s0">child: Row(</span>
+              <span class="s0">children: [</span>
+                <span class="s0">Expanded(</span>
+                  <span class="s0">flex: </span><span class="s3">10</span><span class="s2">,</span>
+                  <span class="s0">child: SizedBox()</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">Expanded(</span>
+                  <span class="s0">flex: </span><span class="s3">35</span><span class="s2">,</span>
+                  <span class="s0">child: Card(</span>
+                    <span class="s0">shape: RoundedRectangleBorder(</span>
+                      <span class="s0">borderRadius: BorderRadius.circular(</span><span class="s3">15.0</span><span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">color: colors[</span><span class="s3">2</span><span class="s0">]</span><span class="s2">,</span>
+                    <span class="s0">child: ListTile(</span>
+                      <span class="s0">leading: Container(</span>
+                        <span class="s0">width: </span><span class="s3">30</span><span class="s2">,</span>
+                        <span class="s0">height: </span><span class="s3">30</span><span class="s2">,</span>
+                        <span class="s0">decoration: BoxDecoration(</span>
+                          <span class="s0">image: DecorationImage(</span>
+                            <span class="s0">image: AssetImage(</span><span class="s1">'assets/B3.png'</span><span class="s0">)</span><span class="s2">,</span>
+                            <span class="s0">fit: BoxFit.cover</span><span class="s2">,</span>
+                          <span class="s0">)</span><span class="s2">,</span>
+                        <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">autofocus: !button3</span><span class="s2">,</span>
+                      <span class="s0">onLongPress: () {</span>
+                        <span class="s0">button3 = </span><span class="s2">true;</span>
+                        <span class="s0">setState(() {</span>
+
+                        <span class="s0">})</span><span class="s2">;</span>
+                      <span class="s0">}</span><span class="s2">,</span>
+                      <span class="s0">title: TextFormField(</span>
+                        <span class="s0">onEditingComplete: () {</span>
+                          <span class="s0">button3 = </span><span class="s2">false;</span>
+                          <span class="s0">name3 = textControl3.text</span><span class="s2">;</span>
+                          <span class="s0">DatabaseConnection.instance.update(id</span><span class="s2">, </span><span class="s0">deviceName</span><span class="s2">, </span><span class="s0">[name1</span><span class="s2">, </span><span class="s0">name2</span><span class="s2">, </span><span class="s0">name3</span><span class="s2">, </span><span class="s0">name4</span><span class="s2">, </span><span class="s0">name5]</span><span class="s2">, </span><span class="s0">ip)</span><span class="s2">;</span>
+                          <span class="s0">setState(() {</span>
+
+                          <span class="s0">})</span><span class="s2">;</span>
+                        <span class="s0">}</span><span class="s2">,</span>
+                        <span class="s0">enabled: button3</span><span class="s2">,</span>
+                        <span class="s0">autofocus: !button3</span><span class="s2">,</span>
+                        <span class="s0">controller: textControl3</span><span class="s2">,</span>
+                        <span class="s0">style: TextStyle(</span>
+                          <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                          <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                        <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">onTap: () async {</span>
+                        <span class="s2">if</span><span class="s0">(colors[</span><span class="s3">2</span><span class="s0">] == Colors.green) {</span>
+                          <span class="s0">Response response = await post(Uri.parse(</span><span class="s1">'</span><span class="s0">${ip}</span><span class="s1">B3'</span><span class="s0">)</span><span class="s2">, </span><span class="s0">body: </span><span class="s1">&quot;0&quot;</span><span class="s0">)</span><span class="s2">;</span>
+                          <span class="s2">if </span><span class="s0">(response.body == </span><span class="s1">&quot;Ok&quot;</span><span class="s0">) {</span>
+                            <span class="s0">colors[</span><span class="s3">2</span><span class="s0">] = Colors.red</span><span class="s2">;</span>
+                            <span class="s0">button[</span><span class="s3">2</span><span class="s0">] = </span><span class="s2">false;</span>
+                          <span class="s0">}</span>
+                        <span class="s0">}</span>
+                        <span class="s2">else if</span><span class="s0">(colors[</span><span class="s3">0</span><span class="s0">] == Colors.red &amp;&amp; colors[</span><span class="s3">1</span><span class="s0">] == Colors.red &amp;&amp; colors[</span><span class="s3">3</span><span class="s0">] == Colors.red) {</span>
+                          <span class="s0">Response response = await post(Uri.parse(</span><span class="s1">'</span><span class="s0">${ip}</span><span class="s1">B3'</span><span class="s0">)</span><span class="s2">, </span><span class="s0">body: </span><span class="s1">&quot;1&quot;</span><span class="s0">)</span><span class="s2">;</span>
+                          <span class="s2">if </span><span class="s0">(response.body == </span><span class="s1">&quot;Ok&quot;</span><span class="s0">) {</span>
+                            <span class="s0">colors[</span><span class="s3">2</span><span class="s0">] = Colors.green</span><span class="s2">;</span>
+                            <span class="s0">button[</span><span class="s3">2</span><span class="s0">] = </span><span class="s2">true;</span>
+                          <span class="s0">}</span>
+                        <span class="s0">}</span>
+                        <span class="s0">setState(() {</span>
+
+                        <span class="s0">})</span><span class="s2">;</span>
+                      <span class="s0">}</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">Expanded(</span>
+                  <span class="s0">flex: </span><span class="s3">10</span><span class="s2">,</span>
+                  <span class="s0">child: SizedBox()</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">Expanded(</span>
+                  <span class="s0">flex: </span><span class="s3">35</span><span class="s2">,</span>
+                  <span class="s0">child: Card(</span>
+                    <span class="s0">shape: RoundedRectangleBorder(</span>
+                      <span class="s0">borderRadius: BorderRadius.circular(</span><span class="s3">15.0</span><span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">color: colors[</span><span class="s3">3</span><span class="s0">]</span><span class="s2">,</span>
+                    <span class="s0">child: ListTile(</span>
+                      <span class="s0">leading: Container(</span>
+                        <span class="s0">width: </span><span class="s3">50</span><span class="s2">,</span>
+                        <span class="s0">height: </span><span class="s3">50</span><span class="s2">,</span>
+                        <span class="s0">decoration: BoxDecoration(</span>
+                          <span class="s0">image: DecorationImage(</span>
+                            <span class="s0">image: AssetImage(</span><span class="s1">'assets/B3.png'</span><span class="s0">)</span><span class="s2">,</span>
+                            <span class="s0">fit: BoxFit.cover</span><span class="s2">,</span>
+                          <span class="s0">)</span><span class="s2">,</span>
+                        <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">autofocus: !button4</span><span class="s2">,</span>
+                      <span class="s0">onLongPress: () {</span>
+                        <span class="s0">button4 = </span><span class="s2">true;</span>
+                        <span class="s0">setState(() {</span>
+
+                        <span class="s0">})</span><span class="s2">;</span>
+                      <span class="s0">}</span><span class="s2">,</span>
+                      <span class="s0">title: TextFormField(</span>
+                        <span class="s0">onEditingComplete: () {</span>
+                          <span class="s0">button4 = </span><span class="s2">false;</span>
+                          <span class="s0">name4 = textControl4.text</span><span class="s2">;</span>
+                          <span class="s0">DatabaseConnection.instance.update(id</span><span class="s2">, </span><span class="s0">deviceName</span><span class="s2">, </span><span class="s0">[name1</span><span class="s2">, </span><span class="s0">name2</span><span class="s2">, </span><span class="s0">name3</span><span class="s2">, </span><span class="s0">name4</span><span class="s2">, </span><span class="s0">name5]</span><span class="s2">, </span><span class="s0">ip)</span><span class="s2">;</span>
+                          <span class="s0">setState(() {</span>
+
+                          <span class="s0">})</span><span class="s2">;</span>
+                        <span class="s0">}</span><span class="s2">,</span>
+                        <span class="s0">enabled: button4</span><span class="s2">,</span>
+                        <span class="s0">autofocus: !button4</span><span class="s2">,</span>
+                        <span class="s0">controller: textControl4</span><span class="s2">,</span>
+                        <span class="s0">style: TextStyle(</span>
+                          <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                          <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                        <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                      <span class="s0">onTap: () async {</span>
+                        <span class="s2">if</span><span class="s0">(colors[</span><span class="s3">3</span><span class="s0">] == Colors.green) {</span>
+                          <span class="s0">Response response = await post(Uri.parse(</span><span class="s1">'</span><span class="s0">${ip}</span><span class="s1">B4'</span><span class="s0">)</span><span class="s2">, </span><span class="s0">body: </span><span class="s1">&quot;0&quot;</span><span class="s0">)</span><span class="s2">;</span>
+                          <span class="s2">if </span><span class="s0">(response.body == </span><span class="s1">&quot;Ok&quot;</span><span class="s0">) {</span>
+                            <span class="s0">colors[</span><span class="s3">3</span><span class="s0">] = Colors.red</span><span class="s2">;</span>
+                            <span class="s0">button[</span><span class="s3">3</span><span class="s0">] = </span><span class="s2">false;</span>
+                          <span class="s0">}</span>
+                        <span class="s0">}</span>
+                        <span class="s2">else if</span><span class="s0">(colors[</span><span class="s3">0</span><span class="s0">] == Colors.red &amp;&amp; colors[</span><span class="s3">1</span><span class="s0">] == Colors.red &amp;&amp; colors[</span><span class="s3">2</span><span class="s0">] == Colors.red) {</span>
+                          <span class="s0">Response response = await post(Uri.parse(</span><span class="s1">'</span><span class="s0">${ip}</span><span class="s1">B4'</span><span class="s0">)</span><span class="s2">, </span><span class="s0">body: </span><span class="s1">&quot;1&quot;</span><span class="s0">)</span><span class="s2">;</span>
+                          <span class="s2">if </span><span class="s0">(response.body == </span><span class="s1">&quot;Ok&quot;</span><span class="s0">) {</span>
+                            <span class="s0">colors[</span><span class="s3">3</span><span class="s0">] = Colors.green</span><span class="s2">;</span>
+                            <span class="s0">button[</span><span class="s3">3</span><span class="s0">] = </span><span class="s2">true;</span>
+                          <span class="s0">}</span>
+                        <span class="s0">}</span>
+                        <span class="s0">setState(() {</span>
+
+                        <span class="s0">})</span><span class="s2">;</span>
+                      <span class="s0">}</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">Expanded(</span>
+                  <span class="s0">flex: </span><span class="s3">10</span><span class="s2">,</span>
+                  <span class="s0">child: SizedBox()</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">]</span><span class="s2">,</span>
+            <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+          <span class="s0">Expanded(</span>
+            <span class="s0">flex: </span><span class="s3">3</span><span class="s2">,</span>
+            <span class="s0">child: SizedBox.shrink()</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">]</span><span class="s2">,</span>
+      <span class="s0">)</span>
+    <span class="s0">)</span><span class="s2">;</span>
+  <span class="s0">}</span>
+<span class="s0">}</span>
+
+<span class="s0">Future&lt;</span><span class="s2">void</span><span class="s0">&gt; showAlert(BuildContext context</span><span class="s2">, </span><span class="s0">String ip) async {</span>
+  <span class="s0">String text = </span><span class="s1">' '</span><span class="s2">;</span>
+  <span class="s0">TextEditingController textControl1 = </span><span class="s2">new </span><span class="s0">TextEditingController(text: name5)</span><span class="s2">;</span>
+  <span class="s0">TextEditingController textControl2 = </span><span class="s2">new </span><span class="s0">TextEditingController()</span><span class="s2">;</span>
+  <span class="s0">TextEditingController textControl3 = </span><span class="s2">new </span><span class="s0">TextEditingController()</span><span class="s2">;</span>
+  <span class="s0">late Response response</span><span class="s2">;</span>
+  <span class="s0">showDialog(</span>
+    <span class="s0">context: context</span><span class="s2">,</span>
+    <span class="s0">builder: (context) =&gt; StatefulBuilder(</span>
+      <span class="s0">builder: (context</span><span class="s2">, </span><span class="s0">setState) {</span>
+        <span class="s2">return </span><span class="s0">AlertDialog(</span>
+          <span class="s0">title: Column(</span>
+            <span class="s0">children: [</span>
+              <span class="s0">TextFormField(</span>
+                <span class="s0">controller: textControl1</span><span class="s2">,</span>
+                <span class="s0">decoration: </span><span class="s2">const </span><span class="s0">InputDecoration(</span>
+                    <span class="s0">border: UnderlineInputBorder()</span><span class="s2">,</span>
+                    <span class="s0">labelText: </span><span class="s1">'Name'</span><span class="s2">,</span>
+                    <span class="s0">labelStyle: TextStyle(</span>
+                      <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                    <span class="s0">)</span>
+                <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">style: TextStyle(</span>
+                  <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                  <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">SizedBox(</span>
+                <span class="s0">height: </span><span class="s3">5</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">TextFormField(</span>
+                <span class="s0">keyboardType: TextInputType.number</span><span class="s2">,</span>
+                <span class="s0">controller: textControl2</span><span class="s2">,</span>
+                <span class="s0">decoration: </span><span class="s2">const </span><span class="s0">InputDecoration(</span>
+                    <span class="s0">border: UnderlineInputBorder()</span><span class="s2">,</span>
+                    <span class="s0">labelText: </span><span class="s1">'Open Time'</span><span class="s2">,</span>
+                    <span class="s0">labelStyle: TextStyle(</span>
+                      <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                    <span class="s0">)</span>
+                <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">style: TextStyle(</span>
+                  <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                  <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">SizedBox(</span>
+                <span class="s0">height: </span><span class="s3">5</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">TextFormField(</span>
+                <span class="s0">keyboardType: TextInputType.number</span><span class="s2">,</span>
+                <span class="s0">controller: textControl3</span><span class="s2">,</span>
+                <span class="s0">decoration: </span><span class="s2">const </span><span class="s0">InputDecoration(</span>
+                    <span class="s0">border: UnderlineInputBorder()</span><span class="s2">,</span>
+                    <span class="s0">labelText: </span><span class="s1">'Hold Open Time'</span><span class="s2">,</span>
+                    <span class="s0">labelStyle: TextStyle(</span>
+                      <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                    <span class="s0">)</span>
+                <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">style: TextStyle(</span>
+                  <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                  <span class="s0">fontWeight: FontWeight.bold</span><span class="s2">,</span>
+                <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+              <span class="s0">Row(</span>
+                <span class="s0">children: [</span>
+                  <span class="s0">Expanded(</span>
+                    <span class="s0">flex: </span><span class="s3">2</span><span class="s2">,</span>
+                    <span class="s0">child: Text(</span>
+                      <span class="s0">text</span><span class="s2">,</span>
+                      <span class="s0">style: TextStyle(</span>
+                        <span class="s0">fontSize: </span><span class="s3">20</span><span class="s2">,</span>
+                        <span class="s0">color: Colors.red[</span><span class="s3">900</span><span class="s0">]</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">Expanded(</span>
+                    <span class="s0">flex: </span><span class="s3">1</span><span class="s2">,</span>
+                    <span class="s0">child: FlatButton(</span>
+                      <span class="s0">color: Colors.grey</span><span class="s2">,</span>
+                      <span class="s0">onPressed: () async {</span>
+                        <span class="s2">try </span><span class="s0">{</span>
+                          <span class="s0">name5 = textControl1.text</span><span class="s2">;</span>
+                          <span class="s0">time1 = int.parse(textControl2.text)</span><span class="s2">;</span>
+                          <span class="s0">time2 = int.parse(textControl3.text)</span><span class="s2">;</span>
+                          <span class="s2">if </span><span class="s0">(!(time1 &gt; time2) &amp;&amp; (time1&gt;</span><span class="s3">0 </span><span class="s0">&amp;&amp; time1&lt;</span><span class="s3">11</span><span class="s0">) &amp;&amp; (time2&gt;</span><span class="s3">0 </span><span class="s0">&amp;&amp; time2&lt;</span><span class="s3">60</span><span class="s0">)) {</span>
+                            <span class="s0">Navigator.pop(context)</span><span class="s2">;</span>
+                          <span class="s0">}</span>
+                          <span class="s2">else </span><span class="s0">{</span>
+                            <span class="s0">setState(() =&gt; text = </span><span class="s1">&quot;Incorrect input&quot;</span><span class="s0">)</span><span class="s2">;</span>
+                          <span class="s0">}</span>
+                        <span class="s0">}</span>
+                        <span class="s2">catch </span><span class="s0">(ex) {</span>
+                          <span class="s0">setState(() =&gt; text = </span><span class="s1">&quot;Incorrect input&quot;</span><span class="s0">)</span><span class="s2">;</span>
+                        <span class="s0">}</span>
+                      <span class="s0">}</span><span class="s2">,</span>
+                      <span class="s0">child: Text(</span>
+                        <span class="s1">'Okay'</span><span class="s2">,</span>
+                      <span class="s0">)</span><span class="s2">,</span>
+                    <span class="s0">)</span><span class="s2">,</span>
+                  <span class="s0">)</span><span class="s2">,</span>
+                <span class="s0">]</span><span class="s2">,</span>
+              <span class="s0">)</span><span class="s2">,</span>
+            <span class="s0">]</span><span class="s2">,</span>
+          <span class="s0">)</span><span class="s2">,</span>
+        <span class="s0">)</span><span class="s2">;</span>
+      <span class="s0">}</span>
+    <span class="s0">)</span>
+  <span class="s0">)</span><span class="s2">;</span>
+<span class="s0">}</span>
+</pre>
+</body>
+</html>
